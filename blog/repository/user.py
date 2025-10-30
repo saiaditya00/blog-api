@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from ..hashing import Hash
 
 
-def create(db: Session, request: schemas.Blog):
+def create(db: Session, request: schemas.User):
      # Check if user with this email already exists
     existing_user = db.query(models.User).filter(models.User.email == request.email).first()
     if existing_user:
