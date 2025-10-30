@@ -3,6 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from blog.hashing import Hash
 from .. import schemas,database,models,token
+from ..repository import user as user_repository
 
 from sqlalchemy.orm import Session
 from datetime import timedelta
@@ -27,5 +28,11 @@ def login(request:OAuth2PasswordRequestForm = Depends(), db:Session=Depends(data
    
     access_token = token.create_access_token( data={"sub": user.email} )
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/register", response_model=schemas.ShowUser, status_code=status.HTTP_201_CREATED)
+def register(request: schemas.User, db: Session = Depends(database.get_db)):
+    """Public endpoint for user registration"""
+    return user_repository.create(db, request)
 
 
